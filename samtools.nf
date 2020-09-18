@@ -23,7 +23,7 @@ params.samtoolsFaidxResultsDir = 'results/samtools/faidx'
 params.samtoolsSortResultsDir = 'results/samtools/sort'
 params.samtoolsIndexResultsDir = 'results/samtools/index'
 
-params.saveMode = 'copy'
+params.saveMode = 'move'
 
 params.refFasta = "NC000962_3.fasta"
 params.readsFilePattern = "./*_{R1,R2}.fastq.gz"
@@ -100,6 +100,7 @@ process samtoolsSort {
 process samtoolsIndex {
     publishDir params.samtoolsIndexResultsDir, mode: params.saveMode
 //    container 'quay.io/biocontainers/samtools:1.10--h2e538c0_3'
+    errorStrategy 'ignore'
 
     when:
     params.index

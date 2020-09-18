@@ -1,4 +1,5 @@
 #!/usr/bin/env nextflow
+import java.nio.file.Paths
 
 /*
 #==============================================
@@ -41,6 +42,7 @@ gatkHaplotypeCaller
 process gatkHaplotypeCaller {
     publishDir params.haplotypeCallerResultsDir, mode: params.saveMode
 //    container 'quay.io/biocontainers/gatk4:4.1.8.1--py38_0'
+    errorStrategy 'ignore'
 
 
     when:
@@ -48,11 +50,11 @@ process gatkHaplotypeCaller {
 
     input:
     path refFasta from ch_refFasta
+    path "samtoolsIndexResultsDir"  from Channel.value(Paths.get("results/samtools/index"))
+    path "samtoolsFaidxResultsDir"  from Channel.value(Paths.get("results/samtools/faidx"))
+    path "bwaIndexResultsDir" from Channel.value(Paths.get("results/bwa/index"))
+    path "picardCreateSequenceDictionaryResultsDir" from Channel.value(Paths.get("results/picard/createSequenceDictionary"))
     file(sortedBam) from ch_in_gatkHaplotypeCaller
-    path 'samtoolsIndexResultsDir' from Channel.fromPath("results/samtools/index")
-    path 'samtoolsFaidxResultsDir' from Channel.fromPath("results/samtools/faidx")
-    path 'bwaIndexResultsDir' from Channel.fromPath("results/bwa/index")
-    path 'picardCreateSequenceDictionaryResultsDir' from Channel.fromPath("results/picard/createSequenceDictionary")
 
 
     output:

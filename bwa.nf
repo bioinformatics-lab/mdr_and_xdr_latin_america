@@ -69,6 +69,7 @@ process bwaIndex {
 process bwaMem {
     publishDir params.samtoolsSortResultsDir, mode: params.saveMode
 //    container 'quay.io/biocontainers/bwa:0.7.17--hed695b0_7'
+   errorStrategy 'ignore'
 
     when:
     params.mem
