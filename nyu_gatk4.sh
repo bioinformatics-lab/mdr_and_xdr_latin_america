@@ -1,4 +1,5 @@
 # NOTE assume that all the files are from ILLUMINA data
+# REFERENCE https://gencore.bio.nyu.edu/variant-calling-pipeline-gatk4/
 
 
 bwa mem \
