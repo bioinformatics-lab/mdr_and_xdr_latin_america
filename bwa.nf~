@@ -83,16 +83,13 @@ process mem {
 
 
     script:
-    TAG="@RG\\tID:$genomeFileName\\tLB:$genomeFileName\\PL:ILLUMINA\\tPM:HISEQ\\tSM:$genomeFileName"
+     TAG="@RG\\tID:$genomeFileName\\tSM:$genomeFileName\\tLB:$genomeFileName"
 
     """
     cp ${params.indexResultsDir}/* .
     cp ${params.samtoolsFaidxResultsDir}/* .
-
     bwa mem -K 100000000 -Y  -R "${TAG}\" ${params.refFasta} ${genomeReads[0]} ${genomeReads[1]} > ${genomeFileName}.sam
-
     rm \$(readlink -f ${genomeReads[0]}) \$(readlink -f ${genomeReads[1]})
-
     """
 }
 
