@@ -21,7 +21,7 @@ params.indexResultsDir = './results/bwa/index'
 params.memResultsDir = './results/bwa/mem'
 params.samtoolsFaidxResultsDir = './results/samtools/faidx'
 
-params.saveMode = 'copy'
+params.saveMode = 'move'
 
 params.refFasta = "./NC000962_3.fasta"
 params.filePattern = "./*_{R1,R2}.fastq.gz"
@@ -92,6 +92,7 @@ process mem {
     bwa mem -K 100000000 -Y  -R "${TAG}\" ${params.refFasta} ${genomeReads[0]} ${genomeReads[1]} > ${genomeFileName}.sam
 
     rm \$(readlink -f ${genomeReads[0]}) \$(readlink -f ${genomeReads[1]})
+    rm NC*
 
     """
 }

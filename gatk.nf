@@ -19,7 +19,7 @@ params.haplotypeCaller = false
 params.resultsDir = 'results/gatk'
 params.haplotypeCallerResultsDir = 'results/gatk/haplotypeCaller'
 
-params.saveMode = 'copy'
+params.saveMode = 'move'
 params.filePattern = "./*_{R1,R2}.fastq.gz"
 
 params.refFasta = "NC000962_3.fasta"
@@ -28,8 +28,10 @@ Channel.value("$workflow.launchDir/$params.refFasta")
 
 
 params.samtoolsSortResultsDir = 'results/samtools/sort'
+
+params.markDuplicatesSpark = 'results/gatk/markDuplicatesSpark'
 params.sortedBamFilePattern = ".sort.bam"
-Channel.fromPath("${params.samtoolsSortResultsDir}/*${params.sortedBamFilePattern}")
+Channel.fromPath("${params.markDuplicatesSpark}/*${params.sortedBamFilePattern}")
         .set { ch_in_gatkHaplotypeCaller }
 
 
@@ -41,7 +43,7 @@ gatkHaplotypeCaller
 
 process gatkHaplotypeCaller {
     publishDir params.haplotypeCallerResultsDir, mode: params.saveMode
-//    container 'quay.io/biocontainers/gatk4:4.1.8.1--py38_0'
+    container 'quay.io/biocontainers/gatk4:4.1.8.1--py38_0'
     errorStrategy 'ignore'
 
 
@@ -70,7 +72,7 @@ process gatkHaplotypeCaller {
     cp -a bwaIndexResultsDir/* ./
     cp -a picardCreateSequenceDictionaryResultsDir/* ./
 
-    gatk HaplotypeCaller -R ${refFasta} -I ${sortedBam} -O ${sortedBamFileName}.vcf
+    gatk --java-options "-Xms4G"  HaplotypeCaller -R ${refFasta} -I ${sortedBam} -O ${sortedBamFileName}.g.vcf -ERC GVCF
 
 
     rm NC*
