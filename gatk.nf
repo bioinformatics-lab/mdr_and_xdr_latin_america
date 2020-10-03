@@ -29,7 +29,7 @@ Channel.value("$workflow.launchDir/$params.refFasta")
 
 params.samtoolsSortResultsDir = 'results/samtools/sort'
 
-params.markDuplicatesSpark = 'results/gatk/markDuplicatesSpark'
+params.markDuplicatesSpark = 'results/gatk/markDuplicatesSpark_failed'
 params.sortedBamFilePattern = ".sort.bam"
 Channel.fromPath("${params.markDuplicatesSpark}/*${params.sortedBamFilePattern}")
         .set { ch_in_gatkHaplotypeCaller }
